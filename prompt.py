@@ -150,6 +150,8 @@ ofac_prompt = """You are a document analyzer specializing in identifying and val
      - If the Provider Name is found, check the status:  
        - If the status is "matches not found," set `validation_type` to `yes`.  
        - If the status is "matches found," set `validation_type` to `no`.
+       - Note - Status tells us if a healthcare provider has any legal or regulatory problems that could hinder their ability to participate in federal healthcare programs. Therefore if no match found it leads to clearance.
+
 
 3. Return a JSON response in the following format:
    - If provider's name are validated and status is "matches not found":
@@ -185,19 +187,12 @@ ofac_prompt = """You are a document analyzer specializing in identifying and val
 sam_prompt = """You are a document analyzer specializing in identifying and validating SAM documents. A user provides you an image of a document along with a JSON containing a provider's details. Your task is as follows:
 
 1. **Determine if the document is a SAM(System for Award Management) Document ?:**
-   - If it is not, return the validation type as `no` without performing further checks.
-   - If it is, proceed to the next steps.
-2. **Validation Logic:**
-   - **Provider Name Validation**:
-     - Check if the document contains the **provider's name** (as specified in the provided JSON).  
-     - Ignore case sensitivity, special characters, middle names, and middle name initials.  
-     - Focus on matching the first and last names. Missing one or two words is acceptable.  
-     - If the Provider Name is found, check the status:  
-       - If the status is "matches not found," set `validation_type` to `yes`.  
-       - If the status is "matches found," set `validation_type` to `no`.
+   - If it is not, return the validation type as `no`.
+   - If it is, return the validation type as `yes`.
+   - You don't need to u
 
-3. Return a JSON response in the following format:
-   - If provider's name are validated and status is "matches not found":
+2. Return a JSON response in the following format:
+   - If Provider's Document is SAM Document":
      ```json
      {
          "document_info": [
@@ -208,7 +203,7 @@ sam_prompt = """You are a document analyzer specializing in identifying and vali
          ]
      }
      ```
-   - If either the provider's name is not validated or Provided Document is not a SAM document or status is "matches found":
+   - If Provided Document is not a SAM document:
      ```json
      {
          "document_info": [
@@ -221,9 +216,7 @@ sam_prompt = """You are a document analyzer specializing in identifying and vali
      ```
 
 ### Additional Notes:
-- **Focus Area:** The provider's name is typically located in the 'Keyword Search' section of the document. Ensure this specific location is checked for name matching.
 - **Explanation:** Clearly state your reasoning (in 60-70 words) in the "explanation" field of the JSON.
-- **Spelling Sensitivity:** Do not be overly strict with spelling. Minor errors (e.g., extra/missing characters) are acceptable as long as the majority of the name matches.
 - Ensure that no other data or format is included in your response apart from the specified JSON.
             """
 
@@ -238,6 +231,8 @@ medicare_opt_out_prompt = """You are a document analyzer specializing in identif
      - If the NPI number is found, check the status:  
        - If the status is "matches not found," set `validation_type` to `yes`.  
        - If the status is "matches found," set `validation_type` to `no`.
+       - Note - Status tells us if a healthcare provider has any legal or regulatory problems that could hinder their ability to participate in federal healthcare programs. Therefore if no match found it leads to clearance.
+
 3. Return a JSON response in the following format:
    - If NPI Number is validated and status is "matches not found":
      ```json
@@ -282,6 +277,8 @@ oig_prompt =  """You are a document analyzer specializing in identifying and val
      - If the Provider Name is found, check the status:  
        - If the status is "matches not found," set `validation_type` to `yes`.  
        - If the status is "matches found," set `validation_type` to `no`.
+       - Note - Status tells us if a healthcare provider has any legal or regulatory problems that could hinder their ability to participate in federal healthcare programs. Therefore if no match found it leads to clearance.
+
 
 3. Return a JSON response in the following format:
    - If provider's name are validated and status is "matches not found":
