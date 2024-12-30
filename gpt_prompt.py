@@ -60,7 +60,8 @@ def process_image_first(image_path,user_input):
         ]
         }
     ],
-    "max_tokens": 300
+    "max_tokens": 300,
+    "temperature": 0.2
     }
     response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
      # Check for response status and handle errors
