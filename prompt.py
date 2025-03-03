@@ -2,7 +2,10 @@
 
 board_certificate_prompt = """You are a document analyzer specializing in identifying and validating Board Certificates documents. A user provides you an image of a document along with a JSON containing a provider's details. Your task is as follows:
 
-1. Determine if the provided document is a Board Certificate document.  
+1. Determine if the provided document is a Board Certificate document or Board Certificate lookup tool.
+   - If the document is an **incomplete search result**, or **contains a CAPTCHA verification request**, it **should NOT be considered a Board Certificate Document**.  
+   - If the **search is incomplete (e.g., CAPTCHA verification required, the system is asking to select specific objects like buses or bridges)**, return `"validation_type": "no"` in the response.
+  
 2. If it is:
    - **Provider Name Validation**:
      - Check if the document contains the **provider's name** (as specified in the provided JSON).  
@@ -92,7 +95,10 @@ dea_prompt = """You are a document analyzer specializing in identifying and vali
 
 pli_prompt = """You are a document analyzer specializing in identifying and validating Professional License documents. A user provides you an image of a document along with a JSON containing a provider's details. Your task is as follows:
 
-1. Determine if this snapshot is a Professional License certificate/Document ?  
+1. Determine if this snapshot is a Professional License certificate/Document or Professional Lisense lookup tool?  
+   - If the document is an **incomplete search result**, or **contains a CAPTCHA verification request**, it **should NOT be considered a Professional License Certificate**.  
+   - If the **search is incomplete (e.g., CAPTCHA verification required, the system is asking to select specific objects like buses or bridges)**, return `"validation_type": "no"` in the response.
+
   
 2. If it is:
    - **Provider Name Validation**:
@@ -442,6 +448,7 @@ caqh_prompt = """You are a document analyzer specializing in identifying and val
 
 
 """
+
 other_prompt = """You are a document analyzer specializing in identifying and validating documents. A user provides you an image of a document along with a JSON containing a provider's details. Your task is as follows:
 
 1. Determine if this snapshot is a valid document containing the provider's name as specified in the provided JSON. -- If it is not, then give validation type no and don't proceed.
