@@ -4,7 +4,7 @@ import requests
 import os
 from prompts_to_json import regex_search,convert_keys_to_camel_case,rename_degree_key
 from dotenv import load_dotenv
-from prompt import board_certificate_prompt, dea_prompt, pli_prompt, ofac_prompt, sam_prompt, medicare_opt_out_prompt, oig_prompt, npi_prompt, caqh_prompt, other_prompt 
+from prompt import board_certificate_prompt, dea_prompt, pli_prompt, ofac_prompt, sam_prompt, medicare_opt_out_prompt, oig_prompt, npi_prompt, caqh_prompt, other_prompt
 
 
 load_dotenv()
@@ -43,7 +43,7 @@ def process_image_first(image_path,user_input):
     }
 
     payload = {
-    "model": "gpt-4-turbo",
+    "model": "gpt-4.1-2025-04-14",
     "messages": [
         {
             "role" : "system",
@@ -112,7 +112,7 @@ def process_image_second(image_path):
     }
 
     payload = {
-    "model": "gpt-4o",
+    "model": "gpt-4.1-2025-04-14",
     "messages": [
         {
             "role" : "system",
@@ -147,8 +147,7 @@ def process_image_second(image_path):
             }
         ]
         }
-    ],
-    "max_tokens": 300
+    ]
     }
     response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
     var = response.json()['choices'][0]['message']['content']
@@ -179,7 +178,7 @@ def process_image_third(image_path):
     }
 
     payload = {
-    "model": "gpt-4o",
+    "model": "gpt-4.1-2025-04-14",
     "messages": [
         {
             "role" : "system",
@@ -247,7 +246,7 @@ def process_image_fourth(image_path):
     }
 
     payload = {
-    "model": "gpt-4o",
+    "model": "gpt-4.1-2025-04-14",
     "messages": [
         {
             "role" : "system",
