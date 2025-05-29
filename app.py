@@ -6,6 +6,7 @@ import glob
 import requests
 import base64
 import json
+import uuid
 from gpt_prompt import process_image_first,process_image_second,process_image_third,process_image_fourth
 
 app = Flask(__name__)
@@ -88,7 +89,8 @@ def upload_file():
         content = response.content
         # pure_name = f'file_{1}'
         # extension = file
-        ori_img_new = f"file_{1}.{file_extension}"
+        unique_id = str(uuid.uuid4())
+        ori_img_new = f"{unique_id}.{file_extension}"
         save_folder = PDF_FOLDER        
         # Save the content to a file
         if file_extension=='pdf':    
@@ -104,6 +106,13 @@ def upload_file():
             with open(image_path, 'wb') as file:
                         file.write(content)
             result = prompts_callback(image_path,user_input1)
+
+        try:
+            os.remove(image_path)
+            if 'image_file_path' in locals() and os.path.exists(image_file_path):
+                os.remove(image_file_path)
+        except Exception as e:
+            print(f"Error deleting temp files: {e}")
         return result
     
     else:
