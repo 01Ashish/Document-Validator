@@ -4,12 +4,31 @@ import requests
 import os
 from prompts_to_json import regex_search,convert_keys_to_camel_case,rename_degree_key
 from dotenv import load_dotenv
-from prompt import board_certificate_prompt, dea_prompt, pli_prompt, ofac_prompt, sam_prompt, medicare_opt_out_prompt, oig_prompt, npi_prompt, caqh_prompt, other_prompt
+from prompt import board_certificate_prompt, dea_prompt, pli_prompt, ofac_prompt, sam_prompt, medicare_opt_out_prompt, oig_prompt, npi_prompt, caqh_prompt, cds_prompt, other_prompt
 
 
 load_dotenv()
 api_key = os.getenv("api_key")
 
+def get_required_fields(document_name, user_input):
+    fields_map = {
+        "npi": ["full_name", "npi_number"],
+        "board_certificate": ["full_name", "board_name"],
+        "dea": ["full_name", "dea_number"],
+        "professional_license": ["full_name", "license_number"],
+        "ofac": ["full_name"],
+        "medicare_opt_out": ["npi_number"],
+        "oig": ["full_namee"],
+        "caqh": ["full_name", "npi_number"],
+        "cds": ["cds_number"],
+        "sam": [],  # No data needed
+        "other": ["full_name"]
+    }
+
+    required_keys = fields_map.get(document_name, [])
+    filtered_data = {key: user_input.get(key, "") for key in required_keys}
+    return json.dumps(filtered_data)
+    
 def process_image_first(image_path,user_input):
     
     
@@ -31,6 +50,8 @@ def process_image_first(image_path,user_input):
         prompt = oig_prompt
     elif user_input["document_name"] == "board_certificate":
         prompt = board_certificate_prompt
+    elif user_input["document_name"] == "cds":
+        prompt = cds_prompt
     else:
         prompt = other_prompt
     
@@ -58,7 +79,7 @@ def process_image_first(image_path,user_input):
                 "url": f"data:image/jpeg;base64,{base64_image}"
             }
             },
-            f"Provided JSON Data to validate - {user_input}"
+            f"Provided JSON Data to validate - {get_required_fields(user_input['document_name'], user_input)}"
         ]
         }
     ],
